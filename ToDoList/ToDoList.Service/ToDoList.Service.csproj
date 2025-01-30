@@ -7,7 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Implementations\" />
+      <ProjectReference Include="..\ToDoList.DAL\ToDoList.DAL.csproj" />
+      <ProjectReference Include="..\ToDoList.Domain\ToDoList.Domain.csproj" />
     </ItemGroup>
 
 </Project>
