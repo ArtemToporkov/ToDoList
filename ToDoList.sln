@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoList", "ToDoList\ToDoList.csproj", "{ED389789-06C1-4F27-AE36-744C93BE9ECB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{81D08AC6-EA73-409B-832D-00A6CC4B5EDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDoList.Domain", "ToDoList.Domain\ToDoList.Domain.csproj", "{918B8DAD-E9AF-4B05-BB73-FB1CDAEF3954}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,12 @@ Global
 		{ED389789-06C1-4F27-AE36-744C93BE9ECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED389789-06C1-4F27-AE36-744C93BE9ECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED389789-06C1-4F27-AE36-744C93BE9ECB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{918B8DAD-E9AF-4B05-BB73-FB1CDAEF3954}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{918B8DAD-E9AF-4B05-BB73-FB1CDAEF3954}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{918B8DAD-E9AF-4B05-BB73-FB1CDAEF3954}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{918B8DAD-E9AF-4B05-BB73-FB1CDAEF3954}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{918B8DAD-E9AF-4B05-BB73-FB1CDAEF3954} = {81D08AC6-EA73-409B-832D-00A6CC4B5EDF}
 	EndGlobalSection
 EndGlobal
