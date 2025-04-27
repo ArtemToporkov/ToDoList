@@ -26,7 +26,7 @@ public class TaskService : ITaskService
         {
             _logger.LogInformation($"Запрос на создание задачи: {model.Name}");
             var task = await _taskRepository.GetAll()
-                .Where(x => x.Created.Date == DateTime.Today)
+                .Where(x => x.Created.Date == DateTime.UtcNow.Date)
                 .FirstOrDefaultAsync(x => x.Name == model.Name);
             if (task is not null) 
             {
