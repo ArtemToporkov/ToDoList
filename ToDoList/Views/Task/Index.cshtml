@@ -43,7 +43,13 @@
             serverSide: false,
             searching: false,
             paging: false,
-            sorting: false
+            sorting: false,
+            ajax: {
+                url: '@Url.Action("TaskHandler")',
+                method: 'POST',
+                data: null,
+                
+            }
         })
         $('#createTask').on('click', (e) => {
             e.preventDefault();

@@ -6,6 +6,7 @@ using ToDoList.Domain.ViewModels.Task;
 using ToDoList.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Domain.Enum;
+using ToDoList.Domain.Extensions;
 
 namespace ToDoList.Service.Implementations;
 
@@ -63,6 +64,39 @@ public class TaskService : ITaskService
                 Description = ex.Message,
                 StatusCode = StatusCode.InternalServerError
             };
+        }
+    }
+
+    public async Task<IBaseResponse<IEnumerable<TaskViewModel>>> GetTasks()
+    {
+        try 
+        {
+            var tasks = await _taskRepository.GetAll()
+                .Select(x => new TaskViewModel() 
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    IsDone = x.IsDone == true ? "Готова" : "Не готова",
+                    Priority = x.Priority.GetDisplayName(),
+                    Description = x.Description,
+                    Created = x.Created.ToLongDateString()
+                })
+                .ToListAsync();
+
+            return new BaseResponse<IEnumerable<TaskViewModel>>()
+            {
+                Data = tasks,
+                StatusCode = StatusCode.OK,
+            };
+        }
+        catch (Exception ex) 
+        {
+           _logger.LogError(ex, $"[TaskService.GetTasks]: {ex.Message}");
+            return new BaseResponse<IEnumerable<TaskViewModel>>() 
+            {
+                Description = ex.Message,
+                StatusCode = StatusCode.InternalServerError
+            }; 
         }
     }
 }
