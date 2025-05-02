@@ -72,7 +72,7 @@ public class TaskService : ITaskService
         try 
         {
             var tasks = await _taskRepository.GetAll()
-                .Select(x => new TaskViewModel() 
+                .Select(x => new TaskViewModel
                 {
                     Id = x.Id,
                     Name = x.Name,

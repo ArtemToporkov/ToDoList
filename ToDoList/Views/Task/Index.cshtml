@@ -47,10 +47,31 @@
             ajax: {
                 url: '@Url.Action("TaskHandler")',
                 method: 'POST',
-                data: null,
-                
+                data: null,  
+            },
+            columns: [
+                { data: 'name' },
+                { data: 'priority' },
+                { data: 'description' },
+                { data: 'isDone' },
+                { 
+                    data: null,
+                    sortable: false,
+                    render: (data, type) => {
+                        return '<button class="btn btn-success btn-sm center-block">Выполнить</button>'
+                    }
+                }
+            ],
+            createdRow: (nRow, data) => {
+                for (let i = 0; i < dataTable.columns().header().length - 1; i++) {
+                    $('td', nRow).eq(i).css('cursor', 'pointer');
+                    $('td', nRow).eq(i).on('click', null);
+                }
+
+                $('td button',nRow).on('click', null);
             }
         })
+        
         $('#createTask').on('click', (e) => {
             e.preventDefault();
             $.ajax({
