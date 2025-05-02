@@ -1,4 +1,5 @@
 using ToDoList.Domain.Entity;
+using ToDoList.Domain.Filters.Task;
 using ToDoList.Domain.Response;
 using ToDoList.Domain.ViewModels.Task;
 
@@ -9,5 +10,5 @@ public interface ITaskService
 {
     Task<IBaseResponse<TaskEntity>> Create(CreateTaskViewModel model);
 
-    Task<IBaseResponse<IEnumerable<TaskViewModel>>> GetTasks();
+    Task<IBaseResponse<IEnumerable<TaskViewModel>>> GetTasks(TaskFilter filter);
 }

@@ -7,6 +7,7 @@ using ToDoList.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Domain.Enum;
 using ToDoList.Domain.Extensions;
+using ToDoList.Domain.Filters.Task;
 
 namespace ToDoList.Service.Implementations;
 
@@ -67,11 +68,13 @@ public class TaskService : ITaskService
         }
     }
 
-    public async Task<IBaseResponse<IEnumerable<TaskViewModel>>> GetTasks()
+    public async Task<IBaseResponse<IEnumerable<TaskViewModel>>> GetTasks(TaskFilter filter)
     {
         try 
         {
             var tasks = await _taskRepository.GetAll()
+                .WhereIf(!string.IsNullOrEmpty(filter.Name), x => x.Name == filter.Name)
+                .WhereIf(filter.Priority.HasValue, x => x.Priority == filter.Priority)
                 .Select(x => new TaskViewModel
                 {
                     Id = x.Id,
