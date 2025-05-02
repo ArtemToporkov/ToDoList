@@ -53,6 +53,14 @@
     <script src="//cdn.datatables.net/2.3.0/js/dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: "btn btn-success"
+            },
+            buttonsStyling: false
+        });
+
         let dataTable = $('#taskTableId').DataTable({
             info: false,
             serverSide: true,
@@ -78,12 +86,46 @@
                 }
             ],
             createdRow: (nRow, data) => {
+                const handlerComplete = () => {
+                    swalWithBootstrapButtons.fire({
+                            title: "Вы уверены?",
+                            icon: "warning",
+                            confirmButtonText: "Выполнить!",
+                            reverseButtons: true
+                        }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("EndTask")',
+                                data: { id: data.id },
+                                success: (response) => {
+                                    Swal.fire({
+                                        title: 'Информация',
+                                        text: response.description,
+                                        icon: 'success',
+                                        confirmButtonText: 'Окей'
+                                    })
+                                    dataTable.draw();
+                                },
+                                error: (response) => {
+                                Swal.fire({
+                                        title: 'Информация',
+                                        text: response.responseJSON.description,
+                                        icon: 'error',
+                                        confirmButtonText: 'Окей'
+                                    }) 
+                                }
+                            })
+                        }
+                    });
+                }
+
                 for (let i = 0; i < dataTable.columns().header().length - 1; i++) {
                     $('td', nRow).eq(i).css('cursor', 'pointer');
                     $('td', nRow).eq(i).on('click', null);
                 }
 
-                $('td button',nRow).on('click', null);
+                $('td button',nRow).on('click', handlerComplete);
             }
         });
 

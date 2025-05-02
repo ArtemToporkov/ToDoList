@@ -37,4 +37,15 @@ public class TaskController : Controller
         var response = await _taskService.GetTasks(filter);
         return Json(new { data = response.Data });
     }
+
+    [HttpPost]
+    public async Task<IActionResult> EndTask(long id) 
+    {
+        var response = await _taskService.EndTask(id);
+        if (response.StatusCode == Domain.Enum.StatusCode.OK) 
+        {
+            return Ok(new { description = response.Description });
+        }
+        return BadRequest(new { description = response.Description });
+    }
 }
