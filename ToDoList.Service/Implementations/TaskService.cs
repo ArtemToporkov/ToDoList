@@ -136,4 +136,35 @@ public class TaskService : ITaskService
             };
         }
     }
+
+    public async Task<IBaseResponse<IEnumerable<TaskCompletedViewModel>>> GetCompletedTasks()
+    {
+        try 
+        {
+            var tasks = await _taskRepository.GetAll()
+                .Where(x => x.IsDone)
+                .Where(x => x.Created.Date == DateTime.UtcNow.Date)
+                .Select(x => new TaskCompletedViewModel
+                {
+                    Name = x.Name,
+                    Description = x.Description
+                })
+                .ToListAsync();
+
+            return new BaseResponse<IEnumerable<TaskCompletedViewModel>>
+            {
+                Data = tasks,
+                StatusCode = StatusCode.OK,
+            };
+        }
+        catch (Exception ex) 
+        {
+            _logger.LogError(ex, $"[TaskService.GetCompletedTasks]: {ex.Message}");
+            return new BaseResponse<IEnumerable<TaskCompletedViewModel>>
+            {
+                Description = ex.Message,
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
 }

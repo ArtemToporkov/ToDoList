@@ -20,6 +20,12 @@ public class TaskController : Controller
         return View();
     }
 
+    public async Task<IActionResult> GetCompletedTasks()
+    {
+        var response = await _taskService.GetCompletedTasks();
+        return Json(new { data = response.Data });
+    }
+
     [HttpPost]
     public async Task<IActionResult> Create(CreateTaskViewModel model)
     {
