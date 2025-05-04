@@ -68,7 +68,7 @@ public class TaskService : ITaskService
         }
     }
 
-    public async Task<IBaseResponse<IEnumerable<TaskViewModel>>> GetTasks(TaskFilter filter)
+    public async Task<DataTableResult> GetTasks(TaskFilter filter)
     {
         try 
         {
@@ -76,6 +76,8 @@ public class TaskService : ITaskService
                 .Where(x => !x.IsDone)
                 .WhereIf(!string.IsNullOrEmpty(filter.Name), x => x.Name == filter.Name)
                 .WhereIf(filter.Priority.HasValue, x => x.Priority == filter.Priority)
+                .Skip(filter.Skip)
+                .Take(filter.PageSize)
                 .Select(x => new TaskViewModel
                 {
                     Id = x.Id,
@@ -86,21 +88,18 @@ public class TaskService : ITaskService
                     Created = x.Created.ToLongDateString()
                 })
                 .ToListAsync();
+            var count = _taskRepository.GetAll().Count(x => !x.IsDone);
 
-            return new BaseResponse<IEnumerable<TaskViewModel>>()
+            return new DataTableResult
             {
                 Data = tasks,
-                StatusCode = StatusCode.OK,
+                Total = count
             };
         }
         catch (Exception ex) 
         {
            _logger.LogError(ex, $"[TaskService.GetTasks]: {ex.Message}");
-            return new BaseResponse<IEnumerable<TaskViewModel>>() 
-            {
-                Description = ex.Message,
-                StatusCode = StatusCode.InternalServerError
-            }; 
+            return new DataTableResult();
         }
     }
 
