@@ -167,4 +167,38 @@ public class TaskService : ITaskService
             };
         }
     }
+
+    public async Task<IBaseResponse<IEnumerable<TaskViewModel>>> CalculateCompletedTasks()
+    {
+        try 
+        {
+            var tasks = await _taskRepository.GetAll()
+                .Where(x => x.Created.Date == DateTime.UtcNow.Date)
+                .Select(x => new TaskViewModel
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    IsDone = x.IsDone == true ? "Готова" : "Не готова",
+                    Priority = x.Priority.GetDisplayName(),
+                    Description = x.Description,
+                    Created = x.Created.ToLongDateString()
+                })
+                .ToListAsync();
+
+            return new BaseResponse<IEnumerable<TaskViewModel>>
+            {
+                Data = tasks,
+                StatusCode = StatusCode.OK,
+            };
+        }
+        catch (Exception ex) 
+        {
+            _logger.LogError(ex, $"[TaskService.CalculateCompletedTasks]: {ex.Message}");
+            return new BaseResponse<IEnumerable<TaskViewModel>>
+            {
+                Description = ex.Message,
+                StatusCode = StatusCode.InternalServerError
+            };
+        }
+    }
 }

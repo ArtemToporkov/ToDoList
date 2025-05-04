@@ -15,4 +15,6 @@ public interface ITaskService
     Task<IBaseResponse<bool>> EndTask(long id);
 
     Task<IBaseResponse<IEnumerable<TaskCompletedViewModel>>> GetCompletedTasks();
+
+    Task<IBaseResponse<IEnumerable<TaskViewModel>>> CalculateCompletedTasks();
 }
