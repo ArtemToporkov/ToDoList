@@ -74,9 +74,9 @@
             ajax: {
                 url: '@Url.Action("TaskHandler")',
                 method: 'POST',
-                data: {
-                    Name: $('input[name="nameTask"]').val(),
-                    Priority: $('#prioritySearch option:selected').val()
+                data: d => {
+                    d.Name = $('input[name="nameTask"]').val();
+                    d.Priority = $('#prioritySearch option:selected').val();
                 }
             },
             columns: [
@@ -135,13 +135,6 @@
                 $('td button',nRow).on('click', handlerComplete);
             }
         });
-
-        function model() {
-            return {
-                Name: $('input[name="nameTask"]').val(),
-                Priority: $('#prioritySearch option:selected').val()
-            }
-        }
 
         $('input[name="nameTask"]').on('change', () => {
             dataTable.draw();
