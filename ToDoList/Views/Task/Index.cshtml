@@ -64,6 +64,30 @@
             },
             buttonsStyling: false
         });
+        
+        function updateCompletedTasks() {
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetCompletedTasks", "Task")',
+                success: (data) => {
+                    const ulElement = $('#completedListTasks').empty();
+                    data.data.forEach(task => {
+                        ulElement.append(`
+                            <li class="list-group-item d-flex justify-content-between lh-condensed" style="background-color: #affabf">
+                                <div>
+                                    <h6 class="my-0">Название: ${task.name}</h6>
+                                    <small class="text-muted">Описание: ${task.description}</small>
+                                </div>
+                            </li>
+                        `);
+                    });
+                    $('#countOfCompletedTasks').text(data.data.length);
+                },
+                error: (err) => {
+                    console.error("Ошибка при загрузке выполненных задач:", err);
+                }
+            });
+        }
 
         let dataTable = $('#taskTableId').DataTable({
             info: false,
@@ -113,6 +137,7 @@
                                         confirmButtonText: 'Окей'
                                     })
                                     dataTable.draw();
+                                    updateCompletedTasks();
                                 },
                                 error: (response) => {
                                 Swal.fire({
@@ -156,7 +181,8 @@
                         text: response.description,
                         icon: 'success',
                         confirmButtonText: 'Окей'
-                    })
+                    });
+                    dataTable.draw();
                 },
                 error: (response) => {
                    Swal.fire({
@@ -164,7 +190,8 @@
                         text: response.responseJSON.description,
                         icon: 'error',
                         confirmButtonText: 'Окей'
-                    }) 
+                   });
+                   dataTable.draw();
                 }
             })
         })

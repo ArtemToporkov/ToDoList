@@ -70,26 +70,7 @@
 <script src="~/js/site.js" asp-append-version="true"></script>
 <script>
     $(document).ready(() => {
-        $.ajax({
-            type: 'GET',
-            url: '@Url.Action("GetCompletedTasks", "Task")',
-            success: (data) => {
-                const ulElement = $('#completedListTasks');
-                for (let i = 0; i < data.data.length; i++) {
-                    const task = data.data[i];
-                    ulElement.append(`
-                        <li class="list-group-item d-flex justify-content-between lh-condensed" style="backround-color: #affabf">
-                            <div>
-                                <h6 class="my-0">Название: ${task.name}</h6>
-                                <small class="text-muted">Описание: ${task.description}</small>
-                            </div>
-                        </li>
-                    `)
-                }
-
-                $('#countOfCompletedTasks').text(data.data.length);
-            }
-        })
+        updateCompletedTasks();
     })
 </script>
 @await RenderSectionAsync("Scripts", required: false)
